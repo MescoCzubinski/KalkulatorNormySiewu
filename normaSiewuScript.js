@@ -10,23 +10,6 @@ visited.forEach(input => {
     });
 });
 
-function adjustInputWidths() {
-    const containers = document.querySelectorAll('.input');
-    containers.forEach(container => {
-        const input = container.querySelector('input');
-        const unit = container.querySelector('.unit');
-
-        const fontSize = parseFloat(window.getComputedStyle(input, null).getPropertyValue('font-size'));
-        const containerWidth = container.offsetWidth;
-        const unitWidth = unit.offsetWidth;
-    
-        const inputWidth = containerWidth - unitWidth - (2 * fontSize);
-        input.style.width = `${inputWidth}px`;
-    });
-}
-window.addEventListener('load', adjustInputWidths);
-window.addEventListener('resize', adjustInputWidths);
-
 function textToNumber(variable) {
     variable = variable.replace(/[^0-9.,]/g, '');
     if (variable.includes(",")) {

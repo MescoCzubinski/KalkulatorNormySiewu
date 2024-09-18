@@ -65,29 +65,6 @@ function oneDot(variable){
     return beforeDot + afterDot;
 }
 
-function separator(variable) {
-    const separatorIndex = variable.indexOf('.');
-    let beforeDot, afterDot, result = "";
-
-    if (separatorIndex === -1) {
-        beforeDot = variable;
-        afterDot = '';
-    } else {
-        beforeDot = variable.slice(0, separatorIndex);
-        afterDot = variable.slice(separatorIndex);
-    }
-
-    const firstGroupSize = beforeDot.length % 3 || 3;
-    result = beforeDot.slice(0, firstGroupSize);
-    beforeDot = beforeDot.slice(firstGroupSize);
-
-    while (beforeDot.length > 0) {
-        result += " " + beforeDot.slice(0, 3);
-        beforeDot = beforeDot.slice(3);
-    }
-    return result + afterDot;
-}
-
 function calculate() {
     const grainMassElement = document.getElementById("grainMass");
     const grainDensityElement = document.getElementById("grainDensity");

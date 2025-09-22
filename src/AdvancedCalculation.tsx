@@ -23,19 +23,29 @@ export default function AdvancedCalculation({
     LiczbaZiarniakowZewnetrznychValue,
     setLiczbaZiarniakowZewnetrznychValue,
   ] = useState<string>("");
+  const [
+    LiczbaZiarniakowZewnetrznych2Value,
+    setLiczbaZiarniakowZewnetrznych2Value,
+  ] = useState<string>("");
   const [LiczbaZiarniakowSkrajnychValue, setLiczbaZiarniakowSkrajnychValue] =
+    useState<string>("");
+  const [LiczbaZiarniakowSkrajnych2Value, setLiczbaZiarniakowSkrajnych2Value] =
     useState<string>("");
   const [LiczbaKloskowSrodkowychValue, setLiczbaKloskowSrodkowychValue] =
     useState<string>("");
   const [LiczbaKloskowZewnetrznychValue, setLiczbaKloskowZewnetrznychValue] =
     useState<string>("");
+  const [LiczbaKloskowZewnetrznych2Value, setLiczbaKloskowZewnetrznych2Value] =
+    useState<string>("");
   const [LiczbaKloskowSkrajnychValue, setLiczbaKloskowSkrajnychValue] =
     useState<string>("");
-  const [PlonZKlosaValue, setPlonZKlosaValue] = useState<string>("");
+  const [LiczbaKloskowSkrajnych2Value, setLiczbaKloskowSkrajnych2Value] =
+    useState<string>("");
   const [RozkrzewieniaValue, setRozkrzewieniaValue] = useState<string>("");
   const [ZdolnosciWschodowValue, setZdolnosciWschodowValue] =
     useState<string>("");
   const [StratyZimoweValue, setStratyZimoweValue] = useState<string>("");
+  const [powierzchniaValue, setPowierzchniaValue] = useState<string>("");
   useEffect(() => {
     setMTZMaterialuSiewnegoValue("");
     setMTZPlonuValue("");
@@ -46,14 +56,35 @@ export default function AdvancedCalculation({
     setLiczbaKloskowSrodkowychValue("");
     setLiczbaKloskowZewnetrznychValue("");
     setLiczbaKloskowSkrajnychValue("");
-    setPlonZKlosaValue("");
+    setLiczbaZiarniakowZewnetrznych2Value("");
+    setLiczbaKloskowZewnetrznych2Value("");
+    setLiczbaKloskowSkrajnych2Value("");
+    setLiczbaZiarniakowSkrajnych2Value("");
     setRozkrzewieniaValue("");
     setZdolnosciWschodowValue("");
     setStratyZimoweValue("");
+    setPowierzchniaValue("");
     setIsReset(false);
   }, [isReset, setIsReset]);
 
-  const [liczbaZiarniakowValue, setLiczbaZiarniakowValue] =
+  const setResult = (result: number, unit: string, decimalPlaces: number) => {
+    if (isNaN(result) || !isFinite(result) || result === 0) {
+      return "uzupełnij wartości";
+    } else if (result > 999999) {
+      return "za dużo";
+    } else {
+      return (
+        result.toLocaleString("pl-PL", {
+          minimumFractionDigits: decimalPlaces,
+          maximumFractionDigits: decimalPlaces,
+        }) +
+        " " +
+        unit
+      );
+    }
+  };
+
+  const [liczbaZiarniakow, setliczbaZiarniakow] =
     useState<string>("uzupełnij wartości");
   const [liczbaZiarniakowWKlosie, setLiczbaZiarniakowWKlosie] =
     useState<string>("uzupełnij wartości");
@@ -65,24 +96,15 @@ export default function AdvancedCalculation({
   const [ziarniakiDoSiewu, setZiarniakiDoSiewu] =
     useState<string>("uzupełnij wartości");
   const [normaSiewu, setNormaSiewu] = useState<string>("uzupełnij wartości");
+  const [plonZKlosa, setPlonZKlosa] = useState<string>("uzupełnij wartości");
+  const [zapotrzebowanie, setZapotrzebowanie] =
+    useState<string>("uzupełnij wartości");
   const calculateLiczbaZiarniakow = () => {
     const MTZPlonu = Number(MTZPlonuValue);
     const plon = Number(PlonValue);
     const liczbaZiarniakow = (plon * 100000) / MTZPlonu;
 
-    if (
-      isNaN(liczbaZiarniakow) ||
-      !isFinite(liczbaZiarniakow) ||
-      liczbaZiarniakow === 0
-    ) {
-      setLiczbaZiarniakowValue("uzupełnij wartości");
-    } else if (liczbaZiarniakow > 999999) {
-      setLiczbaZiarniakowValue("za dużo");
-    } else {
-      setLiczbaZiarniakowValue(
-        liczbaZiarniakow.toFixed(0).toString() + " szt./m²"
-      );
-    }
+    setliczbaZiarniakow(setResult(liczbaZiarniakow, "szt./m²", 0));
   };
   const calculateKlosy = () => {
     const liczbaZiarniakowSrodkowych = Number(LiczbaZiarniakowSrodkowychValue);
@@ -93,94 +115,75 @@ export default function AdvancedCalculation({
     const liczbaKloskowSrodkowych = Number(LiczbaKloskowSrodkowychValue);
     const liczbaKloskowZewnetrznych = Number(LiczbaKloskowZewnetrznychValue);
     const liczbaKloskowSkrajnych = Number(LiczbaKloskowSkrajnychValue);
+    const liczbaZiarniakowZewnetrznych2 = Number(
+      LiczbaZiarniakowZewnetrznych2Value
+    );
+    const liczbaZiarniakowSkrajnych2 = Number(LiczbaZiarniakowSkrajnych2Value);
+    const liczbaKloskowZewnetrznych2 = Number(LiczbaKloskowZewnetrznych2Value);
+    const liczbaKloskowSkrajnych2 = Number(LiczbaKloskowSkrajnych2Value);
 
     const liczbaKloskowRazem =
       liczbaKloskowSrodkowych +
       liczbaKloskowZewnetrznych +
-      liczbaKloskowSkrajnych;
-    if (
-      isNaN(liczbaKloskowRazem) ||
-      !isFinite(liczbaKloskowRazem) ||
-      liczbaKloskowRazem === 0
-    ) {
-      setLiczbaKloskowRazem("uzupełnij wartości");
-    } else if (liczbaKloskowRazem > 999999) {
-      setLiczbaKloskowRazem("za dużo");
-    } else {
-      setLiczbaKloskowRazem(liczbaKloskowRazem.toFixed(0).toString() + " szt.");
-    }
+      liczbaKloskowSkrajnych +
+      liczbaKloskowZewnetrznych2 +
+      liczbaKloskowSkrajnych2;
+
+    setLiczbaKloskowRazem(setResult(liczbaKloskowRazem, "szt.", 0));
 
     const liczbaZiarniakowWKlosie =
       liczbaZiarniakowSrodkowych * liczbaKloskowSrodkowych +
       liczbaZiarniakowZewnetrznych * liczbaKloskowZewnetrznych +
-      liczbaZiarniakowSkrajnych * liczbaKloskowSkrajnych;
-    if (
-      isNaN(liczbaZiarniakowWKlosie) ||
-      !isFinite(liczbaZiarniakowWKlosie) ||
-      liczbaZiarniakowWKlosie === 0
-    ) {
-      setLiczbaZiarniakowWKlosie("uzupełnij wartości");
-    } else if (liczbaZiarniakowWKlosie > 999999) {
-      setLiczbaZiarniakowWKlosie("za dużo");
-    } else {
-      setLiczbaZiarniakowWKlosie(
-        liczbaZiarniakowWKlosie.toFixed(0).toString() + " szt."
-      );
-    }
+      liczbaZiarniakowSkrajnych * liczbaKloskowSkrajnych +
+      liczbaZiarniakowSkrajnych2 * liczbaKloskowSkrajnych2 +
+      liczbaZiarniakowZewnetrznych2 * liczbaKloskowZewnetrznych2;
+    setLiczbaZiarniakowWKlosie(setResult(liczbaZiarniakowWKlosie, "szt.", 0));
   };
   const calculateObsadaKlosow = () => {
-    const obsadaKlosow = (Number(PlonValue) * 100) / Number(PlonZKlosaValue);
+    const obsadaKlosow =
+      (Number(PlonValue) * 100) /
+      Number(plonZKlosa.split(" ")[0].replace(",", "."));
 
-    if (isNaN(obsadaKlosow) || !isFinite(obsadaKlosow) || obsadaKlosow === 0) {
-      setObsadaKlosow("uzupełnij wartości");
-    } else if (obsadaKlosow > 999999) {
-      setObsadaKlosow("za dużo");
-    } else {
-      setObsadaKlosow(obsadaKlosow.toFixed(0).toString() + " szt./m²");
-    }
+    console.log(PlonValue);
+    console.log(plonZKlosa.split(" ")[0].replace(",", "."));
+    console.log(obsadaKlosow);
+    setObsadaKlosow(setResult(obsadaKlosow, "szt./m²", 0));
   };
   const calculateZyweWiosna = () => {
     const zyweWiosna =
-      Number(obsadaKlosow.split(" ")[0]) / Number(RozkrzewieniaValue);
-    if (isNaN(zyweWiosna) || !isFinite(zyweWiosna) || zyweWiosna === 0) {
-      setZyweWiosna("uzupełnij wartości");
-    } else if (zyweWiosna > 999999) {
-      setZyweWiosna("za dużo");
-    } else {
-      setZyweWiosna(zyweWiosna.toFixed(0).toString() + " szt./m²");
-    }
+      Number(obsadaKlosow.split(" ")[0].replace(",", ".")) /
+      Number(RozkrzewieniaValue);
+    setZyweWiosna(setResult(zyweWiosna, "szt./m²", 0));
+  };
+  const calculatePlonZKlosa = () => {
+    const plonZKlosa =
+      (Number(liczbaZiarniakowWKlosie.split(" ")[0].replace(",", ".")) *
+        Number(MTZPlonuValue)) /
+      1000;
+    setPlonZKlosa(setResult(plonZKlosa, "g", 2));
   };
   const calculateZiarniakiDoSiewu = () => {
     const ziarniakiDoSiewu =
-      Number(zyweWiosna.split(" ")[0]) /
+      Number(zyweWiosna.split(" ")[0].replace(",", ".")) /
       (Number(ZdolnosciWschodowValue) * 0.01) /
       ((100 - Number(StratyZimoweValue)) * 0.01);
 
-    if (
-      isNaN(ziarniakiDoSiewu) ||
-      !isFinite(ziarniakiDoSiewu) ||
-      ziarniakiDoSiewu === 0
-    ) {
-      setZiarniakiDoSiewu("uzupełnij wartości");
-    } else if (ziarniakiDoSiewu > 999999) {
-      setZiarniakiDoSiewu("za dużo");
-    } else {
-      setZiarniakiDoSiewu(ziarniakiDoSiewu.toFixed(0).toString() + " szt./m²");
-    }
+    setZiarniakiDoSiewu(setResult(ziarniakiDoSiewu, "szt./m²", 0));
   };
   const calculateNormaSiewu = () => {
     const normaSiewu =
-      (Number(ziarniakiDoSiewu.split(" ")[0]) *
+      (Number(ziarniakiDoSiewu.split(" ")[0].replace(",", ".")) *
         Number(MTZMaterialuSiewnegoValue)) /
       100;
 
-    if (isNaN(normaSiewu) || !isFinite(normaSiewu) || normaSiewu === 0) {
-      setNormaSiewu("uzupełnij wartości");
-    } else if (normaSiewu > 999999) {
-      setNormaSiewu("za dużo");
-    } else {
-      setNormaSiewu(normaSiewu.toFixed(2).toString() + " kg/ha");
-    }
+    setNormaSiewu(setResult(normaSiewu, "kg/ha", 2));
+  };
+  const calculateZapotrzebowanie = () => {
+    const zapotrzebowanie =
+      Number(normaSiewu.split(" ")[0].replace(",", ".")) *
+      Number(powierzchniaValue);
+
+    setZapotrzebowanie(setResult(zapotrzebowanie, "kg", 2));
   };
 
   useEffect(() => {
@@ -188,8 +191,10 @@ export default function AdvancedCalculation({
     calculateKlosy();
     calculateObsadaKlosow();
     calculateZyweWiosna();
+    calculatePlonZKlosa();
     calculateZiarniakiDoSiewu();
     calculateNormaSiewu();
+    calculateZapotrzebowanie();
   }, [
     MTZMaterialuSiewnegoValue,
     MTZPlonuValue,
@@ -200,22 +205,34 @@ export default function AdvancedCalculation({
     LiczbaZiarniakowSrodkowychValue,
     LiczbaZiarniakowZewnetrznychValue,
     LiczbaZiarniakowSkrajnychValue,
-    PlonZKlosaValue,
+    LiczbaKloskowZewnetrznych2Value,
+    LiczbaKloskowSkrajnych2Value,
+    LiczbaZiarniakowSkrajnych2Value,
+    LiczbaZiarniakowSkrajnych2Value,
     RozkrzewieniaValue,
     ZdolnosciWschodowValue,
     StratyZimoweValue,
+    liczbaZiarniakow,
+    liczbaZiarniakowWKlosie,
+    liczbaKloskowRazem,
+    obsadaKlosow,
+    zyweWiosna,
+    ziarniakiDoSiewu,
     normaSiewu,
+    plonZKlosa,
+    zapotrzebowanie,
+    powierzchniaValue,
   ]);
 
   return (
     <>
-      <Section title="Parametry podstawowe" showTitleOnMobile={false}>
+      <Section title="Parametry podstawowe" showTitleOnMobile={true}>
         <Input
           number
           value={MTZMaterialuSiewnegoValue}
           setValue={setMTZMaterialuSiewnegoValue}
           title="MTZ materiału siewnego"
-          placeholder="Podaj MTZ"
+          placeholder="Podaj MTZ nasion"
           unit="g"
         />
         <Input
@@ -223,69 +240,105 @@ export default function AdvancedCalculation({
           value={MTZPlonuValue}
           setValue={setMTZPlonuValue}
           title="MTZ plonu"
-          placeholder="Podaj MTZ"
+          placeholder="Podaj MTZ plonu"
           unit="g"
         />
         <Input
           number
           value={PlonValue}
           setValue={setPlonValue}
-          title="Plon"
+          title="Zakładany plon"
           placeholder="Podaj plon"
           unit="t/ha"
         />
-        <Result title="Liczba ziarniaków:" result={liczbaZiarniakowValue} />
+        <Result title="Obsada ziarniaków:" result={liczbaZiarniakow} />
       </Section>
-      <Section title="Ziarniaki i kłoski" showTitleOnMobile={false}>
-        <div className="flex gap-x-2">
-          <img src="/EarIcon.png" alt="kłos" className="w-24 h-fit" />
-          <div className="flex flex-col flex-1 justify-around">
-            <Input
-              number
-              value={LiczbaZiarniakowSkrajnychValue}
-              setValue={setLiczbaZiarniakowSkrajnychValue}
-              title="Ziarniaki skrajne"
-              placeholder="Podaj liczbę ziarniaków"
-              unit="szt."
-            />
+      <Section title="Kłoski i ziarniaki" showTitleOnMobile={true}>
+        <div className="flex gap-x-2 relative h-fit">
+          <img
+            src="./EarIcon.png"
+            alt="kłos"
+            className="absolute top-0 opacity-20 left-[calc(50%-3rem)] w-20"
+          />
+          <div className="grid grid-cols-2 gap-x-3 gap-y-2 justify-around top-0">
             <Input
               number
               value={LiczbaKloskowSkrajnychValue}
               setValue={setLiczbaKloskowSkrajnychValue}
-              title="Kłoski skrajne"
-              placeholder="Podaj liczbę kłosek"
+              title="Kłoski"
+              placeholder="szczytowe"
               unit="szt."
             />
             <Input
               number
-              value={LiczbaZiarniakowZewnetrznychValue}
-              setValue={setLiczbaZiarniakowZewnetrznychValue}
-              title="Ziarniaki zewnętrzne"
-              placeholder="Podaj liczbę ziarniaków"
+              value={LiczbaZiarniakowSkrajnychValue}
+              setValue={setLiczbaZiarniakowSkrajnychValue}
+              title="Ziarniaki"
+              placeholder="szczytowe"
               unit="szt."
             />
             <Input
               number
               value={LiczbaKloskowZewnetrznychValue}
               setValue={setLiczbaKloskowZewnetrznychValue}
-              title="Kłoski zewnętrzne"
-              placeholder="Podaj liczbę kłosek"
+              title=""
+              placeholder="zewnętrzne"
               unit="szt."
             />
             <Input
               number
-              value={LiczbaZiarniakowSrodkowychValue}
-              setValue={setLiczbaZiarniakowSrodkowychValue}
-              title="Ziarniaki środkowe"
-              placeholder="Podaj liczbę ziarniaków"
+              value={LiczbaZiarniakowZewnetrznychValue}
+              setValue={setLiczbaZiarniakowZewnetrznychValue}
+              title=""
+              placeholder="zewnętrzne"
               unit="szt."
             />
             <Input
               number
               value={LiczbaKloskowSrodkowychValue}
               setValue={setLiczbaKloskowSrodkowychValue}
-              title="Kłoski środkowe"
-              placeholder="Podaj liczbę kłosek"
+              title=""
+              placeholder="środkowe"
+              unit="szt."
+            />
+            <Input
+              number
+              value={LiczbaZiarniakowSrodkowychValue}
+              setValue={setLiczbaZiarniakowSrodkowychValue}
+              title=""
+              placeholder="środkowe"
+              unit="szt."
+            />
+            <Input
+              number
+              value={LiczbaKloskowZewnetrznych2Value}
+              setValue={setLiczbaKloskowZewnetrznych2Value}
+              title=""
+              placeholder="zewnętrzne"
+              unit="szt."
+            />
+            <Input
+              number
+              value={LiczbaZiarniakowZewnetrznych2Value}
+              setValue={setLiczbaZiarniakowZewnetrznych2Value}
+              title=""
+              placeholder="zewnętrzne"
+              unit="szt."
+            />
+            <Input
+              number
+              value={LiczbaKloskowSkrajnych2Value}
+              setValue={setLiczbaKloskowSkrajnych2Value}
+              title=""
+              placeholder="zewnętrzne"
+              unit="szt."
+            />
+            <Input
+              number
+              value={LiczbaZiarniakowSkrajnych2Value}
+              setValue={setLiczbaZiarniakowSkrajnych2Value}
+              title=""
+              placeholder="zewnętrzne"
               unit="szt."
             />
           </div>
@@ -296,21 +349,14 @@ export default function AdvancedCalculation({
           result={liczbaZiarniakowWKlosie}
         />
       </Section>
-      <Section title="Parametry podstawowe" showTitleOnMobile={false}>
-        <Input
-          number
-          value={PlonZKlosaValue}
-          setValue={setPlonZKlosaValue}
-          title="Plon z jednego kłosa"
-          placeholder="Podaj plon z kłosa"
-          unit="g/kłos"
-        />
-        <Result title="Obsada kłosów:" result={obsadaKlosow} />
+      <Section title="Obliczenia szczegółowe" showTitleOnMobile={true}>
+        <Result title="Plon z jednego kłosa:" result={plonZKlosa} />
+        <Result title="Planowana obsada kłosów:" result={obsadaKlosow} />
         <Input
           number
           value={RozkrzewieniaValue}
           setValue={setRozkrzewieniaValue}
-          title="Rozkrzewienia"
+          title="Planowana liczba rozkrzewień"
           placeholder="Podaj rozkrzewienia"
           unit="szt./rośl."
         />
@@ -333,6 +379,15 @@ export default function AdvancedCalculation({
         />
         <Result title="Ziarniaki do siewu:" result={ziarniakiDoSiewu} />
         <Result title="Norma siewu:" result={normaSiewu} />
+        <Input
+          number
+          value={powierzchniaValue}
+          setValue={setPowierzchniaValue}
+          title="Oblicz zapotrzebowanie na Twoje pole"
+          placeholder="podaj powierzchnię pola"
+          unit="ha"
+        />
+        <Result title="Zapotrzebowanie:" result={zapotrzebowanie} />
       </Section>
     </>
   );

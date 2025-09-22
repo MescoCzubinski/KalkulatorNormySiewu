@@ -11,25 +11,34 @@ function App() {
 
   return (
     <div className="w-full min-h-screen h-full text-[var(--detail-color)] flex items-center flex-col bg-[#E6FFE6] p-2">
-      <Header
-        title="Oblicz normy siewu z plonu"
-        resetBtnText={"Reset"}
-        reset={setIsReset}
-      ></Header>
       <div className="flex justify-center w-fit flex-wrap gap-10 p-4 bg-[var(--bg-color)] rounded-3xl shadow-[0_0_15px_var(--primary-color)]">
+        <Header
+          title={
+            inputMode === "none"
+              ? "Kalkulator normy siewu"
+              : inputMode === "simple"
+              ? "Norma siewu z obsady jesienią"
+              : inputMode === "advanced"
+              ? "Norma siewu z plonu"
+              : ""
+          }
+          resetBtnText={"Reset"}
+          setInputMode={setInputMode}
+          reset={setIsReset}
+        />
         {inputMode === "none" && (
           <div className="flex items-center gap-4">
             <button
               onClick={() => setInputMode("simple")}
-              className="h-10 px-2 text-lg flex-1 w-full rounded-full border-2 border-[var(--primary-color)] cursor-pointer hover:shadow-[0_0_5px_var(--primary-color)] transition-shadow outline-0"
+              className="text-3xl border-2 rounded-full p-2 px-4 bg-[var(--bg-color)] cursor-pointer hover:shadow-[0_0_10px_var(--primary-color)] transition-shadow outline-0"
             >
-              Prosty
+              z obsady
             </button>
             <button
               onClick={() => setInputMode("advanced")}
-              className="h-10 px-2 text-lg flex-1 w-full rounded-full border-2 border-[var(--primary-color)] cursor-pointer hover:shadow-[0_0_5px_var(--primary-color)] transition-shadow outline-0"
+              className="text-3xl border-2 rounded-full p-2 px-4 bg-[var(--bg-color)] cursor-pointer hover:shadow-[0_0_10px_var(--primary-color)] transition-shadow outline-0"
             >
-              Zaawansowany
+              z plonu
             </button>
           </div>
         )}

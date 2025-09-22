@@ -39,10 +39,12 @@ export default function Input({
   const [afterFristClick, setAfterFristClick] = useState(false);
 
   return (
-    <div className="flex flex-col mb-4">
-      <label htmlFor={title} className="pl-1 pb-1 text-lg font-medium">
-        {title}:
-      </label>
+    <div className="flex flex-col mb-5">
+      {title && (
+        <label htmlFor={title} className="pl-1 pb-1 text-lg font-medium">
+          {title}:
+        </label>
+      )}
       <div className="flex w-full h-fit gap-x-2 items-center">
         {text && (
           <input

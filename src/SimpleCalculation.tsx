@@ -36,6 +36,23 @@ export default function SimpleCalculation({
     setIsReset(false);
   }, [isReset, setIsReset]);
 
+  const setResult = (result: number, unit: string, decimalPlaces: number) => {
+    if (isNaN(result) || !isFinite(result) || result === 0) {
+      return "uzupełnij wartości";
+    } else if (result > 999999) {
+      return "za dużo";
+    } else {
+      return (
+        result.toLocaleString("pl-PL", {
+          minimumFractionDigits: decimalPlaces,
+          maximumFractionDigits: decimalPlaces,
+        }) +
+        " " +
+        unit
+      );
+    }
+  };
+
   const [normaSiewuValue, setNormaSiewuValue] =
     useState<string>("uzupełnij wartości");
   const [zapotrzebowanieValue, setZapotrzebowanieValue] =
@@ -60,26 +77,15 @@ export default function SimpleCalculation({
         varietyType);
 
     sowingRate = Math.round(sowingRate * 10000) / 100;
-    if (isNaN(sowingRate) || !isFinite(sowingRate)) {
-      setNormaSiewuValue("uzupełnij wartości");
-    } else if (sowingRate > 99999) {
-      setNormaSiewuValue("za dużo");
-    } else {
-      setNormaSiewuValue(sowingRate.toFixed(2).toString() + " kg/ha");
-    }
+
+    setNormaSiewuValue(setResult(sowingRate, "kg/ha", 2));
   };
 
   const calculateZapotrzebowanie = () => {
-    const sowingRate = Number(normaSiewuValue.split(" ")[0]);
+    const sowingRate = Number(normaSiewuValue.split(" ")[0].replace(",", "."));
     const area = Number(powierzchniaValue);
     const demand = sowingRate * area;
-    if (isNaN(demand) || !isFinite(demand) || demand === 0) {
-      setZapotrzebowanieValue("uzupełnij wartości");
-    } else if (demand > 99999) {
-      setZapotrzebowanieValue("za dużo");
-    } else {
-      setZapotrzebowanieValue(demand.toFixed(2).toString() + " kg");
-    }
+    setZapotrzebowanieValue(setResult(demand, "kg", 2));
   };
 
   useEffect(() => {
@@ -100,20 +106,20 @@ export default function SimpleCalculation({
 
   return (
     <>
-      <Section title="czynniki podstawowe" showTitleOnMobile={false}>
+      <Section title="czynniki podstawowe" showTitleOnMobile={true}>
         <Input
           number
           value={MTZValue}
           setValue={setMTZValue}
           title="Masa tysiąca ziaren (MTZ)"
-          placeholder="Podaj MTZ"
+          placeholder="Podaj MTZ nasion"
           unit="g"
         />
         <Input
           number
           value={ObsadaValue}
           setValue={setObsadaValue}
-          title="Obsada"
+          title="Planowana obsada jesienią"
           placeholder="Podaj obsadę"
           unit="szt./m²"
         />
@@ -134,13 +140,13 @@ export default function SimpleCalculation({
           unit="%"
         />
       </Section>
-      <Section title="czynniki dodatkowe" showTitleOnMobile={false}>
+      <Section title="czynniki dodatkowe" showTitleOnMobile={true}>
         <Input
           select
           options={[
             { name: "kwalifikowane", value: "1" },
-            { name: "Własne dobrej jakości", value: "0.95" },
-            { name: "Własne gorszej jakości", value: "0.9" },
+            { name: "własne dobrej jakości", value: "0.95" },
+            { name: "własne gorszej jakości", value: "0.9" },
           ]}
           value={PochodzenieNasionValue}
           setValue={setPochodzenieNasionValue}
@@ -197,13 +203,13 @@ export default function SimpleCalculation({
           unit=""
         />
       </Section>
-      <Section title="Wyniki" showTitleOnMobile={false}>
+      <Section title="Wyniki" showTitleOnMobile={true}>
         <Result title="Wynik:" result={normaSiewuValue} />
         <Input
           number
           value={powierzchniaValue}
           setValue={setPowierzchniaValue}
-          title="Oblicz zapotrzebowanie na Twoje pole:"
+          title="Oblicz zapotrzebowanie na Twoje pole"
           placeholder="podaj powierzchnię pola"
           unit="ha"
         />

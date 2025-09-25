@@ -252,7 +252,7 @@ export default function AdvancedCalculation({
       <Section title="Kłoski i ziarniaki" showTitleOnMobile={true}>
         <div className="flex gap-x-2 relative h-fit">
           <img
-            src="./EarIcon.png"
+            src="/EarIcon.png"
             alt="kłos"
             className="absolute top-0 opacity-50 left-[calc(50%-3rem)] w-16"
           />

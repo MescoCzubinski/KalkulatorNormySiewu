@@ -143,10 +143,6 @@ export default function AdvancedCalculation({
     const obsadaKlosow =
       (Number(PlonValue) * 100) /
       Number(plonZKlosa.split(" ")[0].replace(",", "."));
-
-    console.log(PlonValue);
-    console.log(plonZKlosa.split(" ")[0].replace(",", "."));
-    console.log(obsadaKlosow);
     setObsadaKlosow(setResult(obsadaKlosow, "szt./m²", 0));
   };
   const calculateZyweWiosna = () => {

@@ -27,16 +27,16 @@ function App() {
           reset={setIsReset}
         />
         {inputMode === "none" && (
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-4 md:gap-12">
             <button
               onClick={() => setInputMode("simple")}
-              className="text-3xl border-2 rounded-full p-2 px-4 bg-[var(--bg-color)] cursor-pointer hover:shadow-[0_0_10px_var(--primary-color)] transition-shadow outline-0"
+              className="text-3xl border-2 rounded-2xl p-2 px-4 bg-[var(--bg-color)] cursor-pointer hover:shadow-[0_0_10px_var(--primary-color)] transition-shadow outline-0 text-nowrap"
             >
               z obsady
             </button>
             <button
               onClick={() => setInputMode("advanced")}
-              className="text-3xl border-2 rounded-full p-2 px-4 bg-[var(--bg-color)] cursor-pointer hover:shadow-[0_0_10px_var(--primary-color)] transition-shadow outline-0"
+              className="text-3xl border-2 rounded-2xl p-2 px-4 bg-[var(--bg-color)] cursor-pointer hover:shadow-[0_0_10px_var(--primary-color)] transition-shadow outline-0 text-nowrap"
             >
               z plonu
             </button>

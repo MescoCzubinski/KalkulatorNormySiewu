@@ -258,7 +258,7 @@ export default function AdvancedCalculation({
           <img
             src="./EarIcon.png"
             alt="kłos"
-            className="absolute top-0 opacity-20 left-[calc(50%-3rem)] w-20"
+            className="absolute top-0 opacity-50 left-[calc(50%-3rem)] w-16"
           />
           <div className="grid grid-cols-2 gap-x-3 gap-y-2 justify-around top-0">
             <Input
@@ -330,7 +330,7 @@ export default function AdvancedCalculation({
               value={LiczbaKloskowSkrajnych2Value}
               setValue={setLiczbaKloskowSkrajnych2Value}
               title=""
-              placeholder="zewnętrzne"
+              placeholder="dolne"
               unit="szt."
             />
             <Input
@@ -338,7 +338,7 @@ export default function AdvancedCalculation({
               value={LiczbaZiarniakowSkrajnych2Value}
               setValue={setLiczbaZiarniakowSkrajnych2Value}
               title=""
-              placeholder="zewnętrzne"
+              placeholder="dolne"
               unit="szt."
             />
           </div>
